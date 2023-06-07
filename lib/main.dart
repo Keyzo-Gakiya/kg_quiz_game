@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'UI/main_menu_button.dart';
+import 'UI/option_button.dart';
 
 void main() {
   runApp(const Menu());
@@ -34,15 +34,15 @@ class _MainMenuState extends State<MainMenu> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset('images/KG_Logo_2.png'),
-            const MainMenuButton(
+            const OptionButton(
               buttonText: 'Quick Quiz',
               buttonColor: Colors.green,
             ),
-            const MainMenuButton(
+            const OptionButton(
               buttonText: 'Longest Run',
               buttonColor: Colors.blue,
             ),
-            const MainMenuButton(
+            const OptionButton(
               buttonText: 'Rewards',
               buttonColor: Colors.orange,
             ),

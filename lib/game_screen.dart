@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:kg_quiz_game/UI/option_button.dart';
+import 'package:kg_quiz_game/resources/constants.dart';
 
 class GameScreen extends StatelessWidget {
-  final String buTitle;
+  final String gameModeTitle;
 
   //const GameScreen({super.key});
-  const GameScreen({super.key, required this.buTitle});
+  const GameScreen({super.key, required this.gameModeTitle});
 
   @override
   Widget build(BuildContext context) {
     return GameInterface(
-      title: buTitle,
+      title: gameModeTitle,
     );
   }
 } // class GameScreen
@@ -29,10 +31,40 @@ class _GameInterfaceState extends State<GameInterface> {
     return SafeArea(
       child: Material(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(widget.title),
-            const Text('Hello 2'),
-            const Text('Hello 3'),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                widget.title,
+                style: kGameModeTitleTextStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(
+              height: 25.0,
+            ),
+            const Text(
+              'Geography',
+              style: kCategoryTextStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 25.0,
+            ),
+            const Padding(
+              padding: EdgeInsets.all(30.0),
+              child: Text(
+                'Singapore is a country in Europe and it is very beautiful',
+                style: kGameQuestionTextStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(
+              height: 100.0,
+            ),
+            const OptionButton(buttonText: 'True', buttonColor: Colors.green),
+            const OptionButton(buttonText: 'False', buttonColor: Colors.red),
           ],
         ),
       ),

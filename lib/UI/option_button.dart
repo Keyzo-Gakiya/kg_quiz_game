@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kg_quiz_game/game_screen.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
 
-class MainMenuButton extends StatelessWidget {
+class OptionButton extends StatelessWidget {
   final String buttonText;
   final Color buttonColor;
 
-  const MainMenuButton(
+  const OptionButton(
       {super.key, required this.buttonText, required this.buttonColor});
 
   @override
@@ -19,7 +19,7 @@ class MainMenuButton extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => GameScreen(
-                buTitle: buttonText,
+                gameModeTitle: buttonText,
               ),
             ),
           );
