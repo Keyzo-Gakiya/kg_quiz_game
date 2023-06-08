@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kg_quiz_game/UI/option_button.dart';
+import 'package:kg_quiz_game/game_controller.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
 
 class GameScreen extends StatelessWidget {
   final String gameModeTitle;
 
-  //const GameScreen({super.key});
   const GameScreen({super.key, required this.gameModeTitle});
 
   @override
@@ -26,6 +25,13 @@ class GameInterface extends StatefulWidget {
 }
 
 class _GameInterfaceState extends State<GameInterface> {
+  GameController controller = GameController();
+
+  void validateAnswer(bool answer) {
+    setState(() {});
+    controller.nextQuestion();
+  } // validateAnswer()
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,38 +39,61 @@ class _GameInterfaceState extends State<GameInterface> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                widget.title,
-                style: kGameModeTitleTextStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(
-              height: 25.0,
-            ),
-            const Text(
-              'Geography',
-              style: kCategoryTextStyle,
+            Text(
+              widget.title,
+              style: kGameModeTitleTextStyle,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(
-              height: 25.0,
-            ),
-            const Padding(
-              padding: EdgeInsets.all(30.0),
-              child: Text(
-                'Singapore is a country in Europe and it is very beautiful',
-                style: kGameQuestionTextStyle,
-                textAlign: TextAlign.center,
+            Expanded(
+              child: Center(
+                child: Text(
+                  controller.getQuestionCategory(),
+                  style: kCategoryTextStyle,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-            const SizedBox(
-              height: 100.0,
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Text(
+                  controller.getQuestionText(),
+                  style: kGameQuestionTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-            const OptionButton(buttonText: 'True', buttonColor: Colors.green),
-            const OptionButton(buttonText: 'False', buttonColor: Colors.red),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextButton(
+                onPressed: () {
+                  validateAnswer(true);
+                },
+                style: kOptionButtonStyle.copyWith(
+                  backgroundColor: const MaterialStatePropertyAll(Colors.green),
+                ),
+                child: Text(
+                  'True',
+                  style: kMenuButtonTextStyle.copyWith(fontSize: 40.0),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 30.0),
+              child: TextButton(
+                onPressed: () {
+                  validateAnswer(false);
+                },
+                style: kOptionButtonStyle.copyWith(
+                  backgroundColor: const MaterialStatePropertyAll(Colors.red),
+                ),
+                child: Text(
+                  'False',
+                  style: kMenuButtonTextStyle.copyWith(fontSize: 40.0),
+                ),
+              ),
+            ),
           ],
         ),
       ),

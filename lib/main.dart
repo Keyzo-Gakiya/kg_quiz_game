@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'UI/option_button.dart';
+import 'package:kg_quiz_game/resources/constants.dart';
+import 'game_screen.dart';
 
 void main() {
   runApp(const Menu());
@@ -34,17 +35,78 @@ class _MainMenuState extends State<MainMenu> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset('images/KG_Logo_2.png'),
-            const OptionButton(
-              buttonText: 'Quick Quiz',
-              buttonColor: Colors.green,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GameScreen(
+                        gameModeTitle: 'Quick Quiz',
+                      ),
+                    ),
+                  );
+                },
+                style: kOptionButtonStyle.copyWith(
+                  backgroundColor: const MaterialStatePropertyAll(Colors.green),
+                ),
+                child: const Text(
+                  'Quick Quiz',
+                  style: kMenuButtonTextStyle,
+                ),
+              ),
             ),
-            const OptionButton(
-              buttonText: 'Longest Run',
-              buttonColor: Colors.blue,
+            const SizedBox(
+              height: 10.0,
             ),
-            const OptionButton(
-              buttonText: 'Rewards',
-              buttonColor: Colors.orange,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GameScreen(
+                        gameModeTitle: 'Longest Run',
+                      ),
+                    ),
+                  );
+                },
+                style: kOptionButtonStyle.copyWith(
+                  backgroundColor: const MaterialStatePropertyAll(Colors.blue),
+                ),
+                child: const Text(
+                  'Longest Run',
+                  style: kMenuButtonTextStyle,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GameScreen(
+                        gameModeTitle: 'Rewards',
+                      ),
+                    ),
+                  );
+                },
+                style: kOptionButtonStyle.copyWith(
+                  backgroundColor:
+                      const MaterialStatePropertyAll(Colors.orange),
+                ),
+                child: const Text(
+                  'Rewards',
+                  style: kMenuButtonTextStyle,
+                ),
+              ),
             ),
           ],
         ),
