@@ -4,7 +4,7 @@ import 'quiz_question.dart';
 
 class GameController {
   int _questionsAskedNo = 0;
-  int _questionIndex = 0;
+  late int _questionIndex;
 
   final List<int> _questionsAlreadyAsked = [];
 
@@ -21,6 +21,11 @@ class GameController {
     Question('Goku is Namek in the \'Dragon Ball\' anime', 'Television', false),
     Question(
         'You can see the Great Wall of China from space', 'Geography', false),
+    Question('Mexico is located in South America', 'Geography', false),
+    Question('Pearl Jam is from Guatemala', 'Music', false),
+    Question('Computers work with binary code', 'Science', true),
+    Question('Some vipers or snakes can see infrared', 'Biology', true),
+    Question('Elon Musk was born in South Africa', 'Politics', true),
   ];
 
   String getQuestionText() =>
@@ -28,7 +33,19 @@ class GameController {
 
   String getQuestionCategory() =>
       _questionBank[_questionIndex].questionCategory;
-  bool checkAnswer() => _questionBank[_questionIndex].questionAnswer;
+
+  bool getQuestionAnswer() => _questionBank[_questionIndex].questionAnswer;
+
+  void startGame() {
+    _questionIndex = Random().nextInt(_questionBank.length);
+    _questionsAlreadyAsked.add(_questionIndex);
+  }
+
+  void restartGame() {
+    _questionsAskedNo = 0;
+  } // restartGame()
+
+  bool gameFinished() => _questionsAskedNo >= 9 ? true : false;
 
   void nextQuestion() {
     do {
@@ -38,6 +55,8 @@ class GameController {
     _questionsAlreadyAsked.add(_questionIndex);
 
     print('Selected Index: $_questionIndex');
+
+    _questionsAskedNo++;
 
     if (_questionsAlreadyAsked.length == _questionBank.length) {
       print('Game Finished');

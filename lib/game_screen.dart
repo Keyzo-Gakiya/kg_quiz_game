@@ -26,9 +26,44 @@ class GameInterface extends StatefulWidget {
 
 class _GameInterfaceState extends State<GameInterface> {
   GameController controller = GameController();
+  int correctAnswers = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.startGame();
+  }
 
   void validateAnswer(bool answer) {
-    setState(() {});
+    setState(() {
+      if (controller.gameFinished()) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Game Finished'),
+            content: Text('You got $correctAnswers out of 10 correct answers'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'Ok');
+                  correctAnswers = 0;
+                  controller.restartGame();
+                },
+                child: const Text('Ok'),
+              ),
+            ],
+          ),
+        );
+        print('The game has ended');
+      } else {
+        if (controller.getQuestionAnswer() == answer) {
+          correctAnswers++;
+          print('Correct! $correctAnswers');
+        } else {
+          print('Wrong!');
+        }
+      }
+    });
     controller.nextQuestion();
   } // validateAnswer()
 
