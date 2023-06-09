@@ -3,10 +3,10 @@ import 'package:kg_quiz_game/game_controller.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
 import 'dart:math';
 
-class GameScreenQuickQuiz extends StatelessWidget {
+class GameScreen extends StatelessWidget {
   final String gameModeTitle;
 
-  const GameScreenQuickQuiz({super.key, required this.gameModeTitle});
+  const GameScreen({super.key, required this.gameModeTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -31,43 +31,25 @@ class _GameInterfaceState extends State<GameInterface> {
 
   late int bankLength = controller.getBankLength();
   late int questionIndex;
+  bool longestRunMode = false;
   List<int> questionsAlreadyAsked = [];
 
   @override
   void initState() {
     super.initState();
     changeQuestionIndex();
+
+    widget.title == 'Longest Run'
+        ? longestRunMode = true
+        : longestRunMode = false;
   } // initState()
 
   void changeQuestionIndex() {
-    setState(
-      () {
-        do {
-          questionIndex = Random().nextInt(bankLength);
-        } while (questionsAlreadyAsked.contains(questionIndex));
-      },
-    );
+    do {
+      questionIndex = Random().nextInt(bankLength);
+    } while (questionsAlreadyAsked.contains(questionIndex));
 
     questionsAlreadyAsked.add(questionIndex);
-
-    if (questionsAlreadyAsked.length >= 10) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Game Finished'),
-          content: Text('You got $correctAnswers out of 10 correct answers'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                restartGame();
-                Navigator.pop(context, 'Ok');
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
-      );
-    }
 
     print(questionsAlreadyAsked);
     print('length: ${questionsAlreadyAsked.length}');
@@ -77,7 +59,28 @@ class _GameInterfaceState extends State<GameInterface> {
     print('Game restarted from method');
     questionsAlreadyAsked.clear();
     correctAnswers = 0;
-  }
+  } // restartGame()
+
+  void finishGame(String alertTitle, String alertContent) {
+    restartGame();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(alertTitle),
+        content: Text(alertContent),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
+    );
+  } // finishGame()
 
   String getQuestionText(int questionIndex) =>
       controller.getQuestionText(questionIndex); // getQuestionText()
@@ -89,10 +92,26 @@ class _GameInterfaceState extends State<GameInterface> {
       controller.getQuestionAnswer(questionIndex);
 
   void validateAnswer(bool answer) {
-    if (getQuestionAnswer(questionIndex) == answer) {
-      correctAnswers++;
+    if (longestRunMode) {
+      if (getQuestionAnswer(questionIndex) == answer) {
+        correctAnswers++;
+      } else {
+        finishGame('Run Ended!',
+            'You managed to answer $correctAnswers questions correctly!');
+      }
+    } else {
+      if (getQuestionAnswer(questionIndex) == answer) {
+        correctAnswers++;
+      }
+      if (questionsAlreadyAsked.length >= 10) {
+        finishGame('Quiz Completed',
+            'You answered correctly $correctAnswers out of 10 questions!');
+      }
     }
-    changeQuestionIndex();
+
+    setState(() {
+      changeQuestionIndex();
+    });
   } // validateAnswer()
 
   @override
