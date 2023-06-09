@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
-import 'game_screen.dart';
+import 'game_screen_quick_quiz.dart';
 
 void main() {
   runApp(const Menu());
@@ -42,7 +42,7 @@ class _MainMenuState extends State<MainMenu> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GameScreen(
+                      builder: (context) => const GameScreenQuickQuiz(
                         gameModeTitle: 'Quick Quiz',
                       ),
                     ),
@@ -67,7 +67,7 @@ class _MainMenuState extends State<MainMenu> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GameScreen(
+                      builder: (context) => const GameScreenQuickQuiz(
                         gameModeTitle: 'Longest Run',
                       ),
                     ),
@@ -92,7 +92,7 @@ class _MainMenuState extends State<MainMenu> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GameScreen(
+                      builder: (context) => const GameScreenQuickQuiz(
                         gameModeTitle: 'Rewards',
                       ),
                     ),

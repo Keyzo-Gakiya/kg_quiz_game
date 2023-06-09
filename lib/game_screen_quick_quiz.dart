@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kg_quiz_game/game_controller.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
+import 'dart:math';
 
-class GameScreen extends StatelessWidget {
+class GameScreenQuickQuiz extends StatelessWidget {
   final String gameModeTitle;
 
-  const GameScreen({super.key, required this.gameModeTitle});
+  const GameScreenQuickQuiz({super.key, required this.gameModeTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -26,45 +27,72 @@ class GameInterface extends StatefulWidget {
 
 class _GameInterfaceState extends State<GameInterface> {
   GameController controller = GameController();
-  int correctAnswers = 0;
+  int correctAnswers = 0, questionsAsked = 0;
+
+  late int bankLength = controller.getBankLength();
+  late int questionIndex;
+  List<int> questionsAlreadyAsked = [];
 
   @override
   void initState() {
     super.initState();
-    controller.startGame();
+    changeQuestionIndex();
+  } // initState()
+
+  void changeQuestionIndex() {
+    setState(
+      () {
+        do {
+          questionIndex = Random().nextInt(bankLength);
+        } while (questionsAlreadyAsked.contains(questionIndex));
+      },
+    );
+
+    questionsAlreadyAsked.add(questionIndex);
+
+    if (questionsAlreadyAsked.length >= 10) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Game Finished'),
+          content: Text('You got $correctAnswers out of 10 correct answers'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                restartGame();
+                Navigator.pop(context, 'Ok');
+              },
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    print(questionsAlreadyAsked);
+    print('length: ${questionsAlreadyAsked.length}');
+  } // changeQuestionIndex()
+
+  void restartGame() {
+    print('Game restarted from method');
+    questionsAlreadyAsked.clear();
+    correctAnswers = 0;
   }
 
+  String getQuestionText(int questionIndex) =>
+      controller.getQuestionText(questionIndex); // getQuestionText()
+
+  String getQuestionCategory(int questionIndex) =>
+      controller.getQuestionCategory(questionIndex);
+
+  bool getQuestionAnswer(int questionIndex) =>
+      controller.getQuestionAnswer(questionIndex);
+
   void validateAnswer(bool answer) {
-    setState(() {
-      if (controller.gameFinished()) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Game Finished'),
-            content: Text('You got $correctAnswers out of 10 correct answers'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Ok');
-                  correctAnswers = 0;
-                  controller.restartGame();
-                },
-                child: const Text('Ok'),
-              ),
-            ],
-          ),
-        );
-        print('The game has ended');
-      } else {
-        if (controller.getQuestionAnswer() == answer) {
-          correctAnswers++;
-          print('Correct! $correctAnswers');
-        } else {
-          print('Wrong!');
-        }
-      }
-    });
-    controller.nextQuestion();
+    if (getQuestionAnswer(questionIndex) == answer) {
+      correctAnswers++;
+    }
+    changeQuestionIndex();
   } // validateAnswer()
 
   @override
@@ -82,7 +110,7 @@ class _GameInterfaceState extends State<GameInterface> {
             Expanded(
               child: Center(
                 child: Text(
-                  controller.getQuestionCategory(),
+                  getQuestionCategory(questionIndex),
                   style: kCategoryTextStyle,
                   textAlign: TextAlign.center,
                 ),
@@ -93,7 +121,7 @@ class _GameInterfaceState extends State<GameInterface> {
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Text(
-                  controller.getQuestionText(),
+                  getQuestionText(questionIndex),
                   style: kGameQuestionTextStyle,
                   textAlign: TextAlign.center,
                 ),

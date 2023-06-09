@@ -1,13 +1,6 @@
-import 'dart:math';
-
 import 'quiz_question.dart';
 
 class GameController {
-  int _questionsAskedNo = 0;
-  late int _questionIndex;
-
-  final List<int> _questionsAlreadyAsked = [];
-
   final List<Question> _questionBank = [
     Question('Singapore is a country in Europe', 'Geography', false),
     Question(
@@ -28,39 +21,22 @@ class GameController {
     Question('Elon Musk was born in South Africa', 'Politics', true),
   ];
 
-  String getQuestionText() =>
-      _questionBank[_questionIndex].questionText; // getQuestionText()
+  String getQuestionText(int index) =>
+      _questionBank[index].questionText; // getQuestionText()
 
-  String getQuestionCategory() =>
-      _questionBank[_questionIndex].questionCategory;
+  String getQuestionCategory(int index) =>
+      _questionBank[index].questionCategory; // getQuestionCategory()
 
-  bool getQuestionAnswer() => _questionBank[_questionIndex].questionAnswer;
+  bool getQuestionAnswer(int index) =>
+      _questionBank[index].questionAnswer; // getQuestionAnswer()
 
-  void startGame() {
-    _questionIndex = Random().nextInt(_questionBank.length);
-    _questionsAlreadyAsked.add(_questionIndex);
-  }
+  int getBankLength() => _questionBank.length;
 
-  void restartGame() {
-    _questionsAskedNo = 0;
-  } // restartGame()
-
-  bool gameFinished() => _questionsAskedNo >= 9 ? true : false;
-
-  void nextQuestion() {
-    do {
-      _questionIndex = Random().nextInt(_questionBank.length);
-    } while (_questionsAlreadyAsked.contains(_questionIndex));
-
-    _questionsAlreadyAsked.add(_questionIndex);
-
-    print('Selected Index: $_questionIndex');
-
-    _questionsAskedNo++;
-
-    if (_questionsAlreadyAsked.length == _questionBank.length) {
-      print('Game Finished');
-      _questionsAlreadyAsked.clear();
-    }
-  } // nextQuestion()
+  // void nextQuestion() {
+  //   do {
+  //     _questionIndex = Random().nextInt(_questionBank.length);
+  //   } while (_questionsAlreadyAsked.contains(_questionIndex));
+  //
+  //   _questionsAlreadyAsked.add(_questionIndex);
+  // } // nextQuestion()
 } // class GameController
