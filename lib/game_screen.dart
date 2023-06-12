@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kg_quiz_game/game_controller.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 
 class GameScreen extends StatelessWidget {
@@ -45,24 +46,24 @@ class _GameInterfaceState extends State<GameInterface> {
   } // initState()
 
   void changeQuestionIndex() {
-    do {
-      questionIndex = Random().nextInt(bankLength);
-    } while (questionsAlreadyAsked.contains(questionIndex));
+    int bankLengthMethod = controller.getBankLength();
 
-    questionsAlreadyAsked.add(questionIndex);
+    print('Bank Length in Method: ${controller.getBankLength()}');
 
-    print(questionsAlreadyAsked);
-    print('length: ${questionsAlreadyAsked.length}');
+    if (controller.getBankLength() == 0) {
+      finishGame('run Ended', 'You finished the most amazing game ever!');
+    }
+
+    questionIndex = Random().nextInt(bankLengthMethod);
   } // changeQuestionIndex()
 
   void restartGame() {
-    print('Game restarted from method');
     questionsAlreadyAsked.clear();
     correctAnswers = 0;
   } // restartGame()
 
   void finishGame(String alertTitle, String alertContent) {
-    restartGame();
+    checkAchievements();
 
     showDialog(
       context: context,
@@ -72,6 +73,7 @@ class _GameInterfaceState extends State<GameInterface> {
         actions: [
           TextButton(
             onPressed: () {
+              restartGame();
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
@@ -81,6 +83,28 @@ class _GameInterfaceState extends State<GameInterface> {
       ),
     );
   } // finishGame()
+
+  void checkAchievements() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Complete One Quick Quiz
+    if (!longestRunMode) {
+      prefs.setBool('quick_0', true);
+      print('quick 0 unlocked');
+    }
+
+    // Complete One Quick Quiz with 10 correct
+    if (!longestRunMode && correctAnswers >= 10) {
+      await prefs.setBool('quick_1', true);
+      print('quick 1 unlocked');
+    }
+
+    // Complete a Longest Run with at least 20 correct answers
+    if (longestRunMode && correctAnswers == 20) {
+      await prefs.setBool('longest_20', true);
+      print('longest 20 unlocked');
+    }
+  } // checkAchievements()
 
   String getQuestionText(int questionIndex) =>
       controller.getQuestionText(questionIndex); // getQuestionText()
@@ -93,21 +117,29 @@ class _GameInterfaceState extends State<GameInterface> {
 
   void validateAnswer(bool answer) {
     if (longestRunMode) {
-      if (getQuestionAnswer(questionIndex) == answer) {
-        correctAnswers++;
+      print(controller.questionsExhausted());
+
+      if (controller.questionsExhausted()) {
+        finishGame('Well Done', 'Come back later');
       } else {
-        finishGame('Run Ended!',
-            'You managed to answer $correctAnswers questions correctly!');
+        if (getQuestionAnswer(questionIndex) == answer) {
+          correctAnswers++;
+        } else {
+          finishGame(
+              'Run Ended!', 'You answered $correctAnswers questions correctly');
+        }
       }
     } else {
       if (getQuestionAnswer(questionIndex) == answer) {
         correctAnswers++;
       }
-      if (questionsAlreadyAsked.length >= 10) {
+      if (controller.getBankLength() <= bankLength - 9) {
         finishGame('Quiz Completed',
             'You answered correctly $correctAnswers out of 10 questions!');
       }
     }
+
+    controller.removeQuestion(questionIndex);
 
     setState(() {
       changeQuestionIndex();

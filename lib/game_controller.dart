@@ -7,7 +7,7 @@ class GameController {
         'The planets in the Solar System fit within the distance from Earth to the Moon',
         'Science',
         true),
-    Question('Marilyn Monroe was born in 1978', 'Pop Culture', false),
+    Question('Marilyn Monroe was born in 1926', 'Pop Culture', true),
     Question('The Cure is a Canadian band', 'Music', false),
     Question(
         'K.I.T.T. (Knight Rider) is a Pontiac TransAm', 'Television', true),
@@ -19,6 +19,23 @@ class GameController {
     Question('Computers work with binary code', 'Science', true),
     Question('Some vipers or snakes can see infrared', 'Biology', true),
     Question('Elon Musk was born in South Africa', 'Politics', true),
+    Question('Russia is bigger than Canada', 'Geography', true),
+    Question('Albert Einstein was born in Germany', 'History', true),
+    Question('\'LASER\' is an acronym', 'Science', true),
+    Question('The original \'iPhone\' was released in 2007', 'History', true),
+    Question('Apollo is the Roman god of Medicine', 'History', false),
+    Question('Samuel L. Jackson has participated in more than 100 films',
+        'Movies', true),
+    Question('The RMS Titanic sunken in 1914', 'History', false),
+    Question('Belonephobia is the fear of needles', 'Medicine', true),
+    Question(
+        'Micro-controllers include a CPU and input and output ports in the same package',
+        'Science',
+        true),
+    Question(
+        'Our planet\'s spin allow airplanes to travel faster when moving towards the West',
+        'Geography',
+        false),
   ];
 
   String getQuestionText(int index) =>
@@ -30,13 +47,12 @@ class GameController {
   bool getQuestionAnswer(int index) =>
       _questionBank[index].questionAnswer; // getQuestionAnswer()
 
+  bool questionsExhausted() => _questionBank.isEmpty;
+
   int getBankLength() => _questionBank.length;
 
-  // void nextQuestion() {
-  //   do {
-  //     _questionIndex = Random().nextInt(_questionBank.length);
-  //   } while (_questionsAlreadyAsked.contains(_questionIndex));
-  //
-  //   _questionsAlreadyAsked.add(_questionIndex);
-  // } // nextQuestion()
+  void removeQuestion(int questionIndex) {
+    print('Question Index Removed: $questionIndex');
+    _questionBank.removeAt(questionIndex);
+  } // removeQuestion()
 } // class GameController

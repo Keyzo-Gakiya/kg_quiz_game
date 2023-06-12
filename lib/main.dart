@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kg_quiz_game/resources/constants.dart';
 import 'game_screen.dart';
+import 'achievements.dart';
 
 void main() {
   runApp(const Menu());
@@ -92,8 +93,8 @@ class _MainMenuState extends State<MainMenu> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GameScreen(
-                        gameModeTitle: 'Coming Soon',
+                      builder: (context) => const AchievementsScreen(
+                        achievementTitle: 'Achievements',
                       ),
                     ),
                   );
