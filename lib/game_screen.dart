@@ -48,10 +48,9 @@ class _GameInterfaceState extends State<GameInterface> {
   void changeQuestionIndex() {
     int bankLengthMethod = controller.getBankLength();
 
-    print('Bank Length in Method: ${controller.getBankLength()}');
-
     if (controller.getBankLength() == 0) {
-      finishGame('run Ended', 'You finished the most amazing game ever!');
+      finishGame('Run Ended',
+          'You finished the most amazing game ever, please come back later for new questions!');
     }
 
     questionIndex = Random().nextInt(bankLengthMethod);
@@ -90,19 +89,16 @@ class _GameInterfaceState extends State<GameInterface> {
     // Complete One Quick Quiz
     if (!longestRunMode) {
       prefs.setBool('quick_0', true);
-      print('quick 0 unlocked');
     }
 
     // Complete One Quick Quiz with 10 correct
     if (!longestRunMode && correctAnswers >= 10) {
       await prefs.setBool('quick_1', true);
-      print('quick 1 unlocked');
     }
 
     // Complete a Longest Run with at least 20 correct answers
-    if (longestRunMode && correctAnswers == 20) {
-      await prefs.setBool('longest_20', true);
-      print('longest 20 unlocked');
+    if (longestRunMode && correctAnswers >= 21) {
+      await prefs.setBool('longest_21', true);
     }
   } // checkAchievements()
 
@@ -117,17 +113,11 @@ class _GameInterfaceState extends State<GameInterface> {
 
   void validateAnswer(bool answer) {
     if (longestRunMode) {
-      print(controller.questionsExhausted());
-
-      if (controller.questionsExhausted()) {
-        finishGame('Well Done', 'Come back later');
+      if (getQuestionAnswer(questionIndex) == answer) {
+        correctAnswers++;
       } else {
-        if (getQuestionAnswer(questionIndex) == answer) {
-          correctAnswers++;
-        } else {
-          finishGame(
-              'Run Ended!', 'You answered $correctAnswers questions correctly');
-        }
+        finishGame(
+            'Run Ended!', 'You answered $correctAnswers questions correctly');
       }
     } else {
       if (getQuestionAnswer(questionIndex) == answer) {

@@ -27,6 +27,24 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  void showInstructions(String gameMode, String instructions) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(gameMode),
+        content: Text(instructions),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Got it'),
+          ),
+        ],
+      ),
+    );
+  } // showInstructions()
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -36,9 +54,19 @@ class _MainMenuState extends State<MainMenu> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset('images/KG_Logo_2.png'),
+            const Center(
+              child: Text('Long-Press a button for Game Instructions'),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextButton(
+                onLongPress: () {
+                  showInstructions(
+                      'Quick Quiz', 'Respond 10 Questions in a row');
+                },
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -74,6 +102,10 @@ class _MainMenuState extends State<MainMenu> {
                     ),
                   );
                 },
+                onLongPress: () {
+                  showInstructions('Longest Run',
+                      'Respond Questions until you get one wrong or exhaust all available ones');
+                },
                 style: kOptionButtonStyle.copyWith(
                   backgroundColor: const MaterialStatePropertyAll(Colors.blue),
                 ),
@@ -99,12 +131,16 @@ class _MainMenuState extends State<MainMenu> {
                     ),
                   );
                 },
+                onLongPress: () {
+                  showInstructions('Achievements',
+                      'Consult which challenges you have completed and how to tackle new ones');
+                },
                 style: kOptionButtonStyle.copyWith(
                   backgroundColor:
                       const MaterialStatePropertyAll(Colors.orange),
                 ),
                 child: const Text(
-                  'Coming Soon!',
+                  'Achievements',
                   style: kMenuButtonTextStyle,
                 ),
               ),

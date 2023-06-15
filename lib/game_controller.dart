@@ -36,6 +36,17 @@ class GameController {
         'Our planet\'s spin allow airplanes to travel faster when moving towards the West',
         'Geography',
         false),
+    Question(
+        'The capital of the United States is Washington DC', 'Geography', true),
+    Question(
+        'The most common element in the Universe is Hydrogen', 'Physics', true),
+    Question('Saturn\'s rings are made of space ice', 'Science', false),
+    Question('Samus Aran is the protagonist of the Metroid Franchise',
+        'Video games', true),
+    Question('Nintendo is more than 100 years old', 'History', true),
+    Question('Air is thinner the higher you are', 'Physics', true),
+    Question('\'CRT\' stands for Cathodic Ray Tensioner', 'Electronics', false),
+    Question('The Hertz is the measure unit of Frequency', 'Physics', true),
   ];
 
   String getQuestionText(int index) =>
@@ -52,7 +63,6 @@ class GameController {
   int getBankLength() => _questionBank.length;
 
   void removeQuestion(int questionIndex) {
-    print('Question Index Removed: $questionIndex');
     _questionBank.removeAt(questionIndex);
   } // removeQuestion()
 } // class GameController

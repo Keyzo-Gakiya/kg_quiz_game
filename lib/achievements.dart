@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'resources/constants.dart';
+import 'achievement_card.dart';
 
 class AchievementsScreen extends StatelessWidget {
   final String achievementTitle;
@@ -35,7 +36,39 @@ class _AchievementsStatefulState extends State<AchievementsStateful> {
                 style: kGameModeTitleTextStyle,
               ),
             ),
-            const Text('long-click on each one to learn how to unlock it!'),
+            const Text('Tap on an achievement to learn how to unlock it!'),
+            const SizedBox(
+              height: 30.0,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GridView.count(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  children: const [
+                    AchievementCard(
+                      achievementLabel: 'First Game',
+                      achievementID: 'quick_0',
+                      instructionsToUnlock: 'Complete a Quick Quiz Game',
+                    ),
+                    AchievementCard(
+                      achievementLabel: 'All Correct',
+                      achievementID: 'quick_1',
+                      instructionsToUnlock:
+                          'Correctly Respond all Questions in a Quick Quiz',
+                    ),
+                    AchievementCard(
+                      achievementLabel: 'Marathon',
+                      achievementID: 'longest_21',
+                      instructionsToUnlock:
+                          'Correctly respond at least 21 Questions in a Longest Run',
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
